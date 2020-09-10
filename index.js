@@ -1,11 +1,16 @@
+require('dotenv').config()
 const express = require("express")
 const fetch = require("node-fetch")
 
 const app = express()
 
 
-app.get("/", async (req, res) => {
-    const url = "https://jsonplaceholder.typicode.com/posts/1"
+app.get("/api/movie", async (req, res) => {
+    const apiKey = process.env.OMDb_API_KEY
+
+    const searchStr = req.query.s
+
+    const url = `http://www.omdbapi.com/?apikey=${apiKey}&s=${searchStr}`
     try {
         const response = await fetch(url)
         const data = await response.json()
