@@ -4,18 +4,17 @@ const fetch = require("node-fetch")
 const cors = require("cors")
 
 
-const allowedDomains = ["localhost:5001"]
+const allowedDomains = ["http://localhost:5001", "http://localhost:3000"]
 
 
 const app = express()
 
 app.use(cors())
 
-app.get("/api/movie", async (req, res) => {
+app.get("/api/movie/omdbapi/search", async (req, res) => {
 
-    const domain = req.get("host")
-    console.log(domain)
-    console.log(req.headers.origin)
+    const domain = req.headers.origin
+    // console.log(domain)
 
 
     if (allowedDomains.includes(domain)) {
@@ -24,6 +23,34 @@ app.get("/api/movie", async (req, res) => {
         const searchStr = req.query.s
     
         const url = `http://www.omdbapi.com/?apikey=${apiKey}&s=${searchStr}`
+        try {
+            const response = await fetch(url)
+            const data = await response.json()
+            res.send(data)
+        } catch (error) {
+            console.log(error)
+        }
+    } else {
+        res.send({
+            "Response": "False",
+            "Error": "Movie not found!"
+        })
+    }
+
+})
+
+app.get("/api/movie/omdbapi/id", async (req, res) => {
+
+    const domain = req.headers.origin
+    // console.log(domain)
+
+
+    if (allowedDomains.includes(domain)) {
+        const apiKey = process.env.OMDb_API_KEY
+    
+        const searchStr = req.query.i
+    
+        const url = `http://www.omdbapi.com/?apikey=${apiKey}&i=${searchStr}&plot=full`
         try {
             const response = await fetch(url)
             const data = await response.json()
