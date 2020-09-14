@@ -11,7 +11,7 @@ const app = express()
 
 app.use(cors())
 
-app.get("/api/movie/omdbapi/search", async (req, res) => {
+app.get("/api/movie/omdbapi", async (req, res) => {
 
     const domain = req.headers.origin
     // console.log(domain)
@@ -21,34 +21,6 @@ app.get("/api/movie/omdbapi/search", async (req, res) => {
         const apiKey = process.env.OMDb_API_KEY
     
         const queryParams = Object.entries(req.query).map(([key, value]) => `${key}=${value}`).join("&")
-    
-        const url = `http://www.omdbapi.com/?apikey=${apiKey}&${queryParams}`
-        try {
-            const response = await fetch(url)
-            const data = await response.json()
-            res.send(data)
-        } catch (error) {
-            console.log(error)
-        }
-    } else {
-        res.send({
-            "Response": "False",
-            "Error": "Movie not found!"
-        })
-    }
-
-})
-
-app.get("/api/movie/omdbapi/id", async (req, res) => {
-
-    const domain = req.headers.origin
-    
-    
-    if (allowedDomains.includes(domain)) {
-        const apiKey = process.env.OMDb_API_KEY
-        
-        const queryParams = Object.entries(req.query).map(([key, value]) => `${key}=${value}`).join("&")
-        //console.log(queryParams)
     
         const url = `http://www.omdbapi.com/?apikey=${apiKey}&${queryParams}`
         try {
