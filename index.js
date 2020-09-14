@@ -20,9 +20,9 @@ app.get("/api/movie/omdbapi/search", async (req, res) => {
     if (allowedDomains.includes(domain)) {
         const apiKey = process.env.OMDb_API_KEY
     
-        const searchStr = req.query.s
+        const queryParams = Object.entries(req.query).map(([key, value]) => `${key}=${value}`).join("&")
     
-        const url = `http://www.omdbapi.com/?apikey=${apiKey}&s=${searchStr}`
+        const url = `http://www.omdbapi.com/?apikey=${apiKey}&${queryParams}`
         try {
             const response = await fetch(url)
             const data = await response.json()
@@ -42,15 +42,15 @@ app.get("/api/movie/omdbapi/search", async (req, res) => {
 app.get("/api/movie/omdbapi/id", async (req, res) => {
 
     const domain = req.headers.origin
-    // console.log(domain)
-
-
+    
+    
     if (allowedDomains.includes(domain)) {
         const apiKey = process.env.OMDb_API_KEY
+        
+        const queryParams = Object.entries(req.query).map(([key, value]) => `${key}=${value}`).join("&")
+        //console.log(queryParams)
     
-        const searchStr = req.query.i
-    
-        const url = `http://www.omdbapi.com/?apikey=${apiKey}&i=${searchStr}&plot=full`
+        const url = `http://www.omdbapi.com/?apikey=${apiKey}&${queryParams}`
         try {
             const response = await fetch(url)
             const data = await response.json()
